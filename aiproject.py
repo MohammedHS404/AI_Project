@@ -72,35 +72,31 @@ def evaluate_board(board, player):
     # If no winning moves, return a neutral score
     return 0
 
-def minimax(board, depth, maximizingPlayer, currentPlayer):
-  
-    # Base case: game is over or depth limit is reached
+def minimax(board, depth,maximizingPlayer, currentPlayer, alpha=-math.inf, beta=math.inf):
     if check_win(board, 'X') or check_win(board, 'O') or depth == 0:
         return evaluate_board(board, 'X')
 
-    # If the maximizing player is playing
     if maximizingPlayer:
         best_score = -math.inf
         for col in range(COLS):
-            # Simulate a move by the maximizing player
             new_board = [row[:] for row in board]
             if add_piece(new_board, col, 'X'):
-                # Recursively call minimax with the new board and switch players
-                score = minimax(new_board, depth-1, False, currentPlayer)
-                # Update the best score if the new score is better
+                score = minimax(new_board, depth-1, False, currentPlayer,alpha, beta)
                 best_score = max(best_score, score)
+                alpha = max(alpha, best_score)
+                if alpha >= beta:
+                    break
         return best_score
-    # If the minimizing player is playing
     else:
         best_score = math.inf
         for col in range(COLS):
-            # Simulate a move by the minimizing player
             new_board = [row[:] for row in board]
             if add_piece(new_board, col, 'O'):
-                # Recursively call minimax with the new board and switch players
-                score = minimax(new_board, depth-1, True, currentPlayer)
-                # Update the best score if the new score is better
+                score = minimax(new_board, depth-1, True, currentPlayer, alpha, beta)
                 best_score = min(best_score, score)
+                beta = min(beta, best_score)
+                if alpha >= beta:
+                    break
         return best_score
 
 def is_valid_location(board, row,col):
