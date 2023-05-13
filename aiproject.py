@@ -27,7 +27,7 @@ def print_board(board):
         print('|' + '|'.join(row) + '|')
     print(' ' + '-'.join(['-' for i in range(COLS)]))
 
-# manual
+# Manual
 def get_player_input_manual(player):
     while True:
         try:
